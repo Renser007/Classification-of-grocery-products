@@ -4,7 +4,7 @@ import uuid
 DB_HOST = "localhost"
 DB_NAME = "model_state"
 DB_USER = "postgres"
-DB_PASSWORD = "Ren3265933VlVA"
+DB_PASSWORD = ""
 
 class SaveDb:
     def insert_record(self, status, file_path):
