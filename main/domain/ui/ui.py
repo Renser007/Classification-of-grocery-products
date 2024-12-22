@@ -34,6 +34,21 @@ def main():
         prices = dbService.retrieve_price(prediction)
         price_dict = {product_name: price for product_name, price in prices}
 
+        table_data = []
+        for product, quantity in product_counts.items():
+            if product in price_dict:
+                price = price_dict[product]
+                subtotal = price * quantity
+                table_data.append({
+                    'Product': product,
+                    'Quantity': quantity,
+                    'Price': price,
+                    'Subtotal': subtotal
+                })
+
+        label_container.clear()
+        label_container.add_rows(table_data)
+
         total = sum(product_counts[product] * price_dict[product] for product in product_counts if product in price_dict)
         total_price.set_text('Total cost: ' + str(total))
 
@@ -44,8 +59,14 @@ def main():
         with ui.column():
             with ui.column().style('width: 100%; margin: 20px auto; display: block;'):
                 ui.label('Predicted Products:').style('font-weight: bold; margin-bottom: 10px;')
-                label_container = ui.list().style('margin-top: 10px;')
-                total_price = ui.label()
+                label_container = ui.table(
+            columns=[
+                {'name': 'Product', 'label': 'Product', 'field': 'Product'},
+                {'name': 'Quantity', 'label': 'Quantity', 'field': 'Quantity'},
+                {'name': 'Price', 'label': 'Price', 'field': 'Price'},
+                {'name': 'Subtotal', 'label': 'Subtotal', 'field': 'Subtotal'},
+            ], rows = [])
+                total_price = ui.label().style('margin-top: 10px;')
 
 
 ui.run(native=True)
