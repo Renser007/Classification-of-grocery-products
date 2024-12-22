@@ -4,7 +4,7 @@ import uuid
 DB_HOST = "localhost"
 DB_NAME = "model_state"
 DB_USER = "postgres"
-DB_PASSWORD = ""
+DB_PASSWORD = "Ren3265933VlVA"
 
 class SaveDb:
     def insert_record(self, status, file_path):
@@ -37,7 +37,7 @@ class SaveDb:
             print(f"Error: {e}")
 
 
-    def retrieve_file(self, record_id, output_path):
+    def retrieve_file(self, record_id):
         try:
             conn = psycopg2.connect(
                 host=DB_HOST,
@@ -52,11 +52,33 @@ class SaveDb:
             result = cur.fetchone()
 
             if result and result[0]:
-                with open(output_path, 'wb') as file:
-                    file.write(result[0])
-                print(f"File saved to {output_path}")
+                return result
             else:
                 print("No file found for the given ID.")
+
+            cur.close()
+            conn.close()
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def retrieve_price(self, products):
+        try:
+            conn = psycopg2.connect(
+                host=DB_HOST,
+                database=DB_NAME,
+                user=DB_USER,
+                password=DB_PASSWORD
+            )
+            cur = conn.cursor()
+
+            query = "SELECT product_name, product_price FROM product_info WHERE product_name = ANY(%s)"
+            cur.execute(query, (products,))
+            prices = cur.fetchall()
+
+            if prices and prices[0]:
+                return prices
+            else:
+                print("No prices found for the given input.")
 
             cur.close()
             conn.close()
