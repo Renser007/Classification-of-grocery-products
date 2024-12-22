@@ -46,7 +46,8 @@ def main():
                     'Subtotal': subtotal
                 })
 
-        label_container.clear()
+        label_container.rows.clear()
+        label_container.update()
         label_container.add_rows(table_data)
 
         total = sum(product_counts[product] * price_dict[product] for product in product_counts if product in price_dict)
