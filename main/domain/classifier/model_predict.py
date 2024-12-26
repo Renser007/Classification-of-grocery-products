@@ -23,17 +23,15 @@ class Predict:
         results = self.predict(chosen_model, img, classes, conf=conf)
         products = []
 
-        for box in results[0].boxes:  # Loop through all predictions
-            x1, y1, x2, y2 = map(int, box.xyxy[0])  # Extract bounding box coordinates
-            conf = box.conf[0].item()  # Extract confidence score
-            cls = int(box.cls[0].item())  # Extract class index
+        for box in results[0].boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            conf = box.conf[0].item()
+            cls = int(box.cls[0].item())  
 
-            # Get the label for the class
             label = f'{chosen_model.names[cls]} {conf:.2f}'
             product = re.sub(r'\d+(\.\d+)?', '', label).strip()
             products.append(product)
 
-            # Draw bounding box and label
             cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 5)
             cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 5)
 
