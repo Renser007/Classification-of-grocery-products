@@ -26,14 +26,14 @@ class Predict:
         for box in results[0].boxes:
             x1, y1, x2, y2 = map(int, box.xyxy[0])
             conf = box.conf[0].item()
-            cls = int(box.cls[0].item())  
+            cls = int(box.cls[0].item())
 
             label = f'{chosen_model.names[cls]} {conf:.2f}'
             product = re.sub(r'\d+(\.\d+)?', '', label).strip()
             products.append(product)
 
             cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 5)
-            cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 5)
+            cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 8, (255, 0, 0), 5)
 
         cv2.imwrite(output_path, cv2.cvtColor(img, cv2.COLOR_RGBA2RGB))
 
